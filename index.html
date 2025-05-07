@@ -237,7 +237,7 @@
       const galleryContainer = document.getElementById("galleryContainer");
       images.forEach((img, idx) => {
         const col = document.createElement("div");
-        col.className = "col-md-4 mb-4 gallery-item";
+        col.className = "col-12 col-sm-6 col-md-4 mb-4 gallery-item";
         col.dataset.category = img.category;
         col.dataset.aos = "zoom-in";
         col.dataset.aosDelay = idx * 100;
