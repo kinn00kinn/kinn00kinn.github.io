@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポートフォリオ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="bg-dark text-white text-center py-5">
+        <h1>私のポートフォリオ</h1>
+        <p>写真家としての作品を紹介します</p>
+    </header>
+
+    <!-- ナビゲーション -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index.html">ホーム</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="gallery.html">ギャラリー</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">自己紹介</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">お問い合わせ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ギャラリー -->
+    <section class="container my-5">
+        <h2 class="text-center">作品ギャラリー</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <a href="images/photo1.jpg" data-lightbox="gallery">
+                    <img src="images/photo1.jpg" class="img-fluid" alt="作品1">
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="images/photo2.jpg" data-lightbox="gallery">
+                    <img src="images/photo2.jpg" class="img-fluid" alt="作品2">
+                </a>
+            </div>
+            <div class="col-md-4">
+                <a href="images/photo3.jpg" data-lightbox="gallery">
+                    <img src="images/photo3.jpg" class="img-fluid" alt="作品3">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- フッター -->
+    <footer class="bg-dark text-white text-center py-3">
+        <p>&copy; 2025 あなたの名前</p>
+    </footer>
+
+    <!-- 必要なスクリプト -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
