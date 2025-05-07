@@ -11,7 +11,7 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"
@@ -197,7 +197,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-   
 
     <script>
       AOS.init();
@@ -243,7 +242,7 @@
         col.dataset.aosDelay = idx * 100;
         col.innerHTML = `
           <a href="${img.src}" data-lightbox="gallery" data-title="${img.title}">
-            <img src="${img.src}" class="img-fluid" alt="${img.title}" loading="lazy" />
+            <img src="${img.src}" class="img-fluid" width="400" height="300" alt="${img.title}" loading="lazy" />
           </a>
         `;
         galleryContainer.appendChild(col);
