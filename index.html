@@ -5,20 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>写真ポートフォリオ</title>
 
-    <!-- Bootstrap & Lightbox -->
+    <!-- CSSライブラリ -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
+
+    <link rel="stylesheet" href="style.css">
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"
     />
-
-    <!-- AOS (Scroll animation) -->
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
-
-    <!-- Google Fonts & FontAwesome -->
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
       rel="stylesheet"
@@ -27,6 +25,18 @@
       src="https://kit.fontawesome.com/a076d05399.js"
       crossorigin="anonymous"
     ></script>
+
+    <meta
+      name="description"
+      content="写真家キンキンのポートフォリオサイト。風景・ポートレートの作品、撮影記録、ブログなど。"
+    />
+    <meta property="og:title" content="写真ポートフォリオ - キンキン" />
+    <meta
+      property="og:description"
+      content="心に残る一瞬をカメラで切り取る。ポートレート・風景写真のギャラリーとブログを掲載。"
+    />
+    <meta property="og:image" content="images/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <style>
       body {
@@ -49,6 +59,13 @@
       .gallery img:hover {
         transform: scale(1.05);
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .filter-btn.active {
+        background-color: #343a40;
+        color: #fff;
+      }
+      .gallery-item {
+        display: none; /* 初期は非表示、JSで制御 */
       }
       footer {
         background-color: #343a40;
@@ -107,14 +124,22 @@
         </div>
       </div>
     </nav>
+    <button
+      id="toggleDark"
+      class="btn btn-outline-secondary position-fixed"
+      style="top: 20px; right: 20px; z-index: 999"
+    >
+      🌙
+    </button>
 
     <!-- ギャラリー -->
     <section id="gallery" class="container my-5 gallery">
       <h2 class="text-center mb-4" data-aos="fade-up">作品ギャラリー</h2>
-
-      <!-- カテゴリフィルタ -->
       <div class="text-center mb-4">
-        <button class="btn btn-outline-dark filter-btn" data-category="all">
+        <button
+          class="btn btn-outline-dark filter-btn active"
+          data-category="all"
+        >
           すべて
         </button>
         <button
@@ -130,18 +155,13 @@
           ポートレート
         </button>
       </div>
-
-      <div class="row" id="galleryContainer">
-        <!-- JSで画像読み込み -->
-      </div>
+      <div class="row" id="galleryContainer"></div>
     </section>
 
-    <!-- ブログセクション -->
+    <!-- ブログ -->
     <section id="blog" class="container my-5">
       <h2 class="text-center mb-4" data-aos="fade-up">ブログ</h2>
-      <div class="list-group" id="blogList">
-        <!-- JSでブログリストを読み込み -->
-      </div>
+      <div class="list-group" id="blogList"></div>
     </section>
 
     <!-- お問い合わせ -->
@@ -150,14 +170,9 @@
       <p data-aos="fade-up" data-aos-delay="100">
         お仕事のご依頼やご相談はメールでお気軽にどうぞ。
       </p>
-      <a
-        href="modspire@gmail.com"
-        class="btn btn-primary mt-3"
-        data-aos="fade-up"
-        data-aos-delay="200"
+      <a href="mailto:modspire@gmail.com" class="btn btn-primary mt-3"
+        >メールを送る</a
       >
-        メールを送る
-      </a>
     </section>
 
     <!-- スクロールトップ -->
@@ -177,15 +192,22 @@
       </div>
     </footer>
 
-    <!-- JSスクリプト -->
+    <!-- JSライブラリ -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+   
+
     <script>
       AOS.init();
 
-      // スクロールトップボタン
+      // ダークモード切替
+      document.getElementById("toggleDark").addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+      });
+
+      // スクロールトップボタン制御
       const scrollBtn = document.getElementById("scrollTopBtn");
       window.addEventListener("scroll", () => {
         scrollBtn.style.display = window.scrollY > 100 ? "block" : "none";
@@ -194,31 +216,24 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      // カテゴリフィルタ
-      document.querySelectorAll(".filter-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const category = button.getAttribute("data-category");
-          document.querySelectorAll(".gallery-item").forEach((item) => {
-            item.style.display =
-              category === "all" || item.dataset.category === category
-                ? "block"
-                : "none";
-          });
-        });
-      });
-
-      // 動的に画像を読み込む（ファイル名が決まっている場合）
+      // 画像情報
       const images = [
         { src: "images/IMG_7391.JPG", title: "風景1", category: "landscape" },
-        { src: "images/IMG_7406.JPG", title: "風景2", category: "portrait" },
+        { src: "images/IMG_7406.JPG", title: "風景2", category: "landscape" },
         { src: "images/IMG_7443.JPG", title: "風景3", category: "landscape" },
         { src: "images/IMG_7558.JPG", title: "風景4", category: "landscape" },
         { src: "images/IMG_7563.JPG", title: "風景5", category: "landscape" },
         { src: "images/IMG_7596.JPG", title: "風景6", category: "landscape" },
         { src: "images/IMG_7852.JPG", title: "風景7", category: "landscape" },
         { src: "images/IMG_7889.JPG", title: "風景8", category: "landscape" },
-        { src: "images/IMG_7933.JPG", title: "風景9", category: "landscape" },
+        {
+          src: "images/IMG_7933.JPG",
+          title: "ポートレート1",
+          category: "portrait",
+        },
       ];
+
+      // ギャラリー生成
       const galleryContainer = document.getElementById("galleryContainer");
       images.forEach((img, idx) => {
         const col = document.createElement("div");
@@ -226,16 +241,38 @@
         col.dataset.category = img.category;
         col.dataset.aos = "zoom-in";
         col.dataset.aosDelay = idx * 100;
-
         col.innerHTML = `
-        <a href="${img.src}" data-lightbox="gallery" data-title="${img.title}">
-          <img src="${img.src}" class="img-fluid" alt="${img.title}" loading="lazy" />
-        </a>
-      `;
+          <a href="${img.src}" data-lightbox="gallery" data-title="${img.title}">
+            <img src="${img.src}" class="img-fluid" alt="${img.title}" loading="lazy" />
+          </a>
+        `;
         galleryContainer.appendChild(col);
       });
 
-      // 動的にブログ読み込み（本来はJSONからfetch可能）
+      // 初期表示（すべて）
+      function filterImages(category) {
+        document.querySelectorAll(".gallery-item").forEach((item) => {
+          item.style.display =
+            category === "all" || item.dataset.category === category
+              ? "block"
+              : "none";
+        });
+      }
+      filterImages("all");
+
+      // フィルタボタン制御
+      document.querySelectorAll(".filter-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+          const category = button.getAttribute("data-category");
+          filterImages(category);
+        });
+      });
+
+      // ブログ読み込み
       const blogs = [
         {
           href: "blog/post1.html",
@@ -257,11 +294,7 @@
         a.href = blog.href;
         a.dataset.aos = "fade-right";
         a.dataset.aosDelay = idx * 100;
-        a.innerHTML = `
-        <h5 class="mb-1">${blog.title}</h5>
-        <small>${blog.date}</small>
-        <p class="mb-1">${blog.desc}</p>
-      `;
+        a.innerHTML = `<h5 class="mb-1">${blog.title}</h5><small>${blog.date}</small><p class="mb-1">${blog.desc}</p>`;
         blogList.appendChild(a);
       });
     </script>
