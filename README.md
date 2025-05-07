@@ -1,4 +1,3 @@
-
 ## 📸 写真ポートフォリオ - キンキン
 
 ### 概要
@@ -9,25 +8,25 @@
 
 ### 🔧 機能一覧
 
-* ギャラリー表示（フィルター切り替え：全て / 風景 / ポートレート）
-* Lightbox による画像拡大表示
-* ブログ記事一覧
-* お問い合わせリンク（mailto）
-* ダークモード切り替え
-* スクロールトップボタン
-* モバイル対応（レスポンシブデザイン）
-* パフォーマンス最適化（画像 lazyload、未使用CSS削減 等）
+- ギャラリー表示（フィルター切り替え：全て / 風景 / ポートレート）
+- Lightbox による画像拡大表示
+- ブログ記事一覧
+- お問い合わせリンク（mailto）
+- ダークモード切り替え
+- スクロールトップボタン
+- モバイル対応（レスポンシブデザイン）
+- パフォーマンス最適化（画像 lazyload、未使用 CSS 削減 等）
 
 ---
 
 ### 🛠️ 使用技術
 
-* HTML5 / CSS3
-* JavaScript (Vanilla JS)
-* [Bootstrap 4.3.1](https://getbootstrap.com/)
-* [AOS - Animate On Scroll](https://michalsnik.github.io/aos/)
-* [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/)
-* Google Fonts（Noto Sans JP）
+- HTML5 / CSS3
+- JavaScript (Vanilla JS)
+- [Bootstrap 4.3.1](https://getbootstrap.com/)
+- [AOS - Animate On Scroll](https://michalsnik.github.io/aos/)
+- [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/)
+- Google Fonts（Noto Sans JP）
 
 ---
 
@@ -36,8 +35,8 @@
 1. このリポジトリをクローン：
 
    ```bash
-   git clone https://github.com/yourname/photo-portfolio.git
-   cd photo-portfolio
+   git clone https://github.com/kinn00kinn/portfolio.github.io
+   cd portfolio.github.io
    ```
 
 2. 必要に応じて画像やブログ記事を `images/`, `blog/` フォルダに追加してください。
@@ -48,34 +47,32 @@
 
 ### 📱 モバイル対応について
 
-* `viewport` メタタグによりレスポンシブ対応
-* Bootstrap のグリッドを活用し、スマートフォン〜PC で快適な閲覧性を確保
-* 画像の `img-fluid` により柔軟なサイズ調整
-* 各コンポーネントがモバイルでも表示崩れしないように設計
+- `viewport` メタタグによりレスポンシブ対応
+- Bootstrap のグリッドを活用し、スマートフォン〜PC で快適な閲覧性を確保
+- 画像の `img-fluid` により柔軟なサイズ調整
+- 各コンポーネントがモバイルでも表示崩れしないように設計
 
 ---
 
 ### 📈 パフォーマンス最適化
 
-* 画像は lazyload (`loading="lazy"`) を使用
-* 使用していないCSSの削減
-* 次世代画像フォーマット（今後導入予定）
-* 明示的な `width` / `height` 指定によるCLSの抑制
-* キャッシュポリシーの最適化推奨
+- 画像は lazyload (`loading="lazy"`) を使用
+- 使用していない CSS の削減
+- 次世代画像フォーマット（今後導入予定）
+- 明示的な `width` / `height` 指定による CLS の抑制
+- キャッシュポリシーの最適化推奨
 
 ---
 
 ## 📜 プロジェクトの歴史（開発の流れ）
 
-| 日付        | 内容                                                              |
-| --------- | --------------------------------------------------------------- |
-| 2025年4月   | 初版のHTMLテンプレートを作成。静的な構造と簡単なギャラリーを実装。                             |
-| 2025年4月中旬 | ブログセクションとメール問い合わせ機能を追加。                                         |
-| 2025年4月末  | ダークモード切り替え機能とスクロールトップボタンを追加。                                    |
-| 2025年5月初旬 | モバイル対応・AOSアニメーション・Lightbox導入。                                   |
-| 2025年5月上旬 | パフォーマンス改善（画像lazyload、未使用CSS削除、画像サイズ見直し）を実施。Lighthouseスコアを大幅に改善。 |
-| 今後の予定     | 次世代画像フォーマット（WebP）対応、サービスワーカー導入によるPWA化検討中。                       |
+| 日付             | 内容                                                                                                          |
+| ---------------- | ------------------------------------------------------------------------------------------------------------- |
+| 2025 年 4 月     | 初版の HTML テンプレートを作成。静的な構造と簡単なギャラリーを実装。                                          |
+| 2025 年 4 月中旬 | ブログセクションとメール問い合わせ機能を追加。                                                                |
+| 2025 年 4 月末   | ダークモード切り替え機能とスクロールトップボタンを追加。                                                      |
+| 2025 年 5 月初旬 | モバイル対応・AOS アニメーション・Lightbox 導入。                                                             |
+| 2025 年 5 月上旬 | パフォーマンス改善（画像 lazyload、未使用 CSS 削除、画像サイズ見直し）を実施。Lighthouse スコアを大幅に改善。 |
+| 今後の予定       | 次世代画像フォーマット（WebP）対応、サービスワーカー導入による PWA 化検討中。                                 |
 
 ---
-
-
