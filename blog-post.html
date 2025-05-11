@@ -1,86 +1,189 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ブログ記事</title> <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ブログ記事</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
     <style>
-        /* blog-post.html固有のスタイルがあればここに追加 */
-        body {
-            padding-top: 20px; /* ナビゲーションバーを固定しない場合など調整 */
-        }
-        .blog-content img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 5px;
-        }
-        .breadcrumb-item a {
-            color: #007bff;
-        }
-        body.dark-mode .breadcrumb-item a {
-            color: #58a6ff;
-        }
-        body.dark-mode .blog-content {
-            color: #c9d1d9; /* ダークモード時の本文色 */
-        }
-        body.dark-mode .blog-content h1,
-        body.dark-mode .blog-content h2,
-        body.dark-mode .blog-content h3,
-        body.dark-mode .blog-content h4,
-        body.dark-mode .blog-content h5,
-        body.dark-mode .blog-content h6 {
-            color: #f0f6fc; /* ダークモード時の見出し色 */
-            border-bottom-color: #444c56;
-        }
-        body.dark-mode .blog-content code {
-            background-color: #424242;
-            color: #e0e0e0;
-        }
-        body.dark-mode .blog-content pre {
-            background-color: #2d2d2d;
-        }
-         body.dark-mode .blog-content blockquote {
-            border-left-color: #555;
-            color: #aaa;
-        }
-        body.dark-mode .blog-content table th,
-        body.dark-mode .blog-content table td {
-            border-color: #555;
-        }
+      body {
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.8;
+}
+
+.blog-content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.blog-content h1, .blog-content h2, .blog-content h3 {
+  font-weight: bold;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-left: 5px solid #007bff;
+  padding-left: 0.75rem;
+}
+
+.blog-content h1 {
+  font-size: 2rem;
+}
+
+.blog-content h2 {
+  font-size: 1.6rem;
+}
+
+.blog-content h3 {
+  font-size: 1.3rem;
+}
+
+.blog-content p {
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.blog-content blockquote {
+  border-left: 4px solid #007bff;
+  background: #eef5ff;
+  padding: 1rem 1.5rem;
+  color: #444;
+  margin: 2rem 0;
+  font-style: italic;
+}
+
+.blog-content pre, .blog-content code {
+  background-color: #f4f4f4;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-family: "Courier New", monospace;
+  overflow-x: auto;
+}
+
+.blog-content pre {
+  padding: 1rem;
+  background-color: #2d2d2d;
+  color: #f8f8f2;
+}
+
+.blog-content a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.blog-content a:hover {
+  text-decoration: none;
+  color: #0056b3;
+}
+
+nav.mb-4 ul {
+  padding-left: 1rem;
+  border-left: 3px solid #ccc;
+}
+
+nav.mb-4 h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+/* ダークモード対応（既存に追加） */
+body.dark-mode {
+  background-color: #121212;
+}
+
+body.dark-mode .blog-content {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark-mode .blog-content h1,
+body.dark-mode .blog-content h2,
+body.dark-mode .blog-content h3 {
+  color: #fff;
+  border-left-color: #58a6ff;
+}
+
+body.dark-mode .blog-content blockquote {
+  background-color: #2c2c2c;
+  border-left-color: #58a6ff;
+  color: #bbb;
+}
+
+body.dark-mode .blog-content pre {
+  background-color: #2d2d2d;
+}
+
+body.dark-mode nav.mb-4 h3 {
+  color: #ccc;
+}
 
     </style>
-</head>
-<body>
-    <button id="toggleDarkBlog" class="btn btn-outline-secondary position-fixed" style="top: 20px; right: 20px; z-index: 1031;">🌙</button>
+  </head>
+  <body>
+    <button
+      id="toggleDarkBlog"
+      class="btn btn-outline-secondary position-fixed"
+      style="top: 20px; right: 20px; z-index: 1031"
+    >
+      🌙
+    </button>
 
     <div class="container mt-5">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">ホーム</a></li>
-                <li class="breadcrumb-item"><a href="index.html#blog">ブログ一覧</a></li>
-                <li class="breadcrumb-item active" aria-current="page" id="blog-title-breadcrumb">記事名</li>
-            </ol>
-        </nav>
-        <hr>
-        <article id="blog-article-content" class="blog-content">
-            <h1 id="article-title"></h1>
-            <p class="text-muted" id="article-date"></p>
-            <div id="article-body"></div>
-        </article>
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">ホーム</a></li>
+          <li class="breadcrumb-item">
+            <a href="index.html#blog">ブログ一覧</a>
+          </li>
+          <li
+            class="breadcrumb-item active"
+            aria-current="page"
+            id="blog-title-breadcrumb"
+          >
+            記事名
+          </li>
+        </ol>
+      </nav>
+      <hr />
+      <article id="blog-article-content" class="blog-content">
+        <h1 id="article-title"></h1>
+        <p class="text-muted" id="article-date"></p>
+        <div id="article-body"></div>
+      </article>
     </div>
 
-    <footer class="text-white text-center py-4 mt-5" style="background-color: #343a40;">
-        <p>&copy; 2025 キンキン. All Rights Reserved.</p>
-        <div class="social-icons">
-            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="mailto:your@email.com"><i class="fas fa-envelope"></i></a>
-        </div>
+    <footer
+      class="text-white text-center py-4 mt-5"
+      style="background-color: #343a40"
+    >
+      <p>&copy; 2025 キンキン. All Rights Reserved.</p>
+      <div class="social-icons">
+        <a href="https://instagram.com" target="_blank"
+          ><i class="fab fa-instagram"></i
+        ></a>
+        <a href="https://twitter.com" target="_blank"
+          ><i class="fab fa-twitter"></i
+        ></a>
+        <a href="mailto:your@email.com"><i class="fas fa-envelope"></i></a>
+      </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -88,69 +191,115 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // ダークモード処理 (script.jsから共通化も検討)
-            const toggleDarkButtonBlog = document.getElementById("toggleDarkBlog");
-            const currentThemeBlog = localStorage.getItem('theme');
+      function generateTOC() {
+  const articleBody = document.getElementById("article-body");
+  const headings = articleBody.querySelectorAll("h2, h3");
+  if (headings.length === 0) return;
 
-            function applyTheme(theme) {
-                if (theme === 'dark') {
-                    document.body.classList.add("dark-mode");
-                    if(toggleDarkButtonBlog) toggleDarkButtonBlog.textContent = "☀️";
-                } else {
-                    document.body.classList.remove("dark-mode");
-                    if(toggleDarkButtonBlog) toggleDarkButtonBlog.textContent = "🌙";
-                }
-            }
-            applyTheme(currentThemeBlog);
+  const tocContainer = document.createElement("nav");
+  tocContainer.className = "mb-4";
+  tocContainer.innerHTML = "<h3>目次</h3>";
 
-            if(toggleDarkButtonBlog) {
-                toggleDarkButtonBlog.addEventListener("click", () => {
-                    document.body.classList.toggle("dark-mode");
-                    let theme = document.body.classList.contains("dark-mode") ? 'dark' : 'light';
-                    localStorage.setItem('theme', theme);
-                    applyTheme(theme);
-                });
-            }
+  const ul = document.createElement("ul");
+  ul.className = "list-unstyled";
 
+  headings.forEach((heading, i) => {
+    const id = `toc-${i}`;
+    heading.id = id;
 
-            const params = new URLSearchParams(window.location.search);
-            const mdFileId = params.get('id'); // blogs.jsonのidを取得
+    const li = document.createElement("li");
+    li.style.marginLeft = heading.tagName === "H3" ? "1rem" : "0";
+    li.innerHTML = `<a href="#${id}">${heading.textContent}</a>`;
+    ul.appendChild(li);
+  });
 
-            if (mdFileId) {
-                try {
-                    // blogs.jsonから該当記事のメタデータを取得
-                    const responseMeta = await fetch('blogs.json');
-                    if (!responseMeta.ok) throw new Error('ブログメタデータの読み込みに失敗');
-                    const blogs = await responseMeta.json();
-                    const postMeta = blogs.find(blog => blog.id === mdFileId);
+  tocContainer.appendChild(ul);
 
-                    if (!postMeta) throw new Error('指定されたブログ記事が見つかりません');
+  const articleElement = document.getElementById("blog-article-content");
+  const dateElem = document.getElementById("article-date");
 
-                    document.title = postMeta.title + " - 写真ポートフォリオ";
-                    document.getElementById('blog-title-breadcrumb').textContent = postMeta.title;
-                    document.getElementById('article-title').textContent = postMeta.title;
-                    document.getElementById('article-date').textContent = "公開日: " + postMeta.date;
+  if (articleElement && dateElem && dateElem.parentNode === articleElement) {
+    // ✅ 公開日の次に挿入
+    articleElement.insertBefore(tocContainer, dateElem.nextSibling);
+  }
+}
 
 
-                    // Markdownファイルをフェッチ
-                    const responseMd = await fetch(`blog/md/${postMeta.mdFile}`);
-                    if (!responseMd.ok) throw new Error(`Markdownファイル (${postMeta.mdFile}) の読み込みに失敗`);
-                    const markdownText = await responseMd.text();
+      document.addEventListener("DOMContentLoaded", async () => {
+        // ダークモード処理 (script.jsから共通化も検討)
+        const toggleDarkButtonBlog = document.getElementById("toggleDarkBlog");
+        const currentThemeBlog = localStorage.getItem("theme");
 
-                    // MarkdownをHTMLに変換して表示
-                    // `marked.parse()` を使用 (marked.js v4以降)
-                    // 古いバージョンでは `marked()`
-                    document.getElementById('article-body').innerHTML = marked.parse(markdownText);
+        function applyTheme(theme) {
+          if (theme === "dark") {
+            document.body.classList.add("dark-mode");
+            if (toggleDarkButtonBlog) toggleDarkButtonBlog.textContent = "☀️";
+          } else {
+            document.body.classList.remove("dark-mode");
+            if (toggleDarkButtonBlog) toggleDarkButtonBlog.textContent = "🌙";
+          }
+        }
+        applyTheme(currentThemeBlog);
 
-                } catch (error) {
-                    console.error("記事の表示エラー:", error);
-                    document.getElementById('article-body').innerHTML = `<p class="text-danger">記事の読み込み中にエラーが発生しました: ${error.message}</p>`;
-                }
-            } else {
-                document.getElementById('article-body').innerHTML = '<p class="text-warning">表示する記事が指定されていません。</p>';
-            }
-        });
+        if (toggleDarkButtonBlog) {
+          toggleDarkButtonBlog.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            let theme = document.body.classList.contains("dark-mode")
+              ? "dark"
+              : "light";
+            localStorage.setItem("theme", theme);
+            applyTheme(theme);
+          });
+        }
+
+        const params = new URLSearchParams(window.location.search);
+        const mdFileId = params.get("id"); // blogs.jsonのidを取得
+
+        if (mdFileId) {
+          try {
+            // blogs.jsonから該当記事のメタデータを取得
+            const responseMeta = await fetch("blogs.json");
+            if (!responseMeta.ok)
+              throw new Error("ブログメタデータの読み込みに失敗");
+            const blogs = await responseMeta.json();
+            const postMeta = blogs.find((blog) => blog.id === mdFileId);
+
+            if (!postMeta)
+              throw new Error("指定されたブログ記事が見つかりません");
+
+            document.title = postMeta.title + " - 写真ポートフォリオ";
+            document.getElementById("blog-title-breadcrumb").textContent =
+              postMeta.title;
+            document.getElementById("article-title").textContent =
+              postMeta.title;
+            document.getElementById("article-date").textContent =
+              "公開日: " + postMeta.date;
+
+            // Markdownファイルをフェッチ
+            const responseMd = await fetch(`blog/md/${postMeta.mdFile}`);
+            if (!responseMd.ok)
+              throw new Error(
+                `Markdownファイル (${postMeta.mdFile}) の読み込みに失敗`
+              );
+            const markdownText = await responseMd.text();
+
+            // MarkdownをHTMLに変換して表示
+            // `marked.parse()` を使用 (marked.js v4以降)
+            // 古いバージョンでは `marked()`
+            document.getElementById("article-body").innerHTML =
+              marked.parse(markdownText);
+            generateTOC(); // Markdownの見出しから目次を作成
+          } catch (error) {
+            console.error("記事の表示エラー:", error);
+            document.getElementById(
+              "article-body"
+            ).innerHTML = `<p class="text-danger">記事の読み込み中にエラーが発生しました: ${error.message}</p>`;
+          }
+        } else {
+          document.getElementById("article-body").innerHTML =
+            '<p class="text-warning">表示する記事が指定されていません。</p>';
+        }
+      });
     </script>
-</body>
+  </body>
 </html>
