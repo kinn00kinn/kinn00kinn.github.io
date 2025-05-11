@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
         w[l] = w[l] || [];
@@ -14,18 +13,14 @@
         j.async = true;
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "G-L26JXQLWJC");
+      })(window, document, "script", "dataLayer", "G-L26JXQLWJC"); // あなたのGTM IDに置き換えてください
     </script>
-    <!-- End Google Tag Manager -->
     <title>写真ポートフォリオ</title>
 
-    <!-- CSSライブラリ -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     />
-
-    <link rel="stylesheet" href="style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css"
@@ -37,6 +32,7 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
+    <link rel="stylesheet" href="style.css" />
 
     <meta
       name="description"
@@ -47,68 +43,17 @@
       property="og:description"
       content="心に残る一瞬をカメラで切り取る。ポートレート・風景写真のギャラリーとブログを掲載。"
     />
-    <meta property="og:image" content="images/og-image.jpg" />
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <style>
-      body {
-        font-family: "Noto Sans JP", sans-serif;
-        background-color: #f8f9fa;
-      }
-      header {
-        background: url("images/header-bg.jpg") center/cover no-repeat;
-        color: white;
-        text-shadow: 2px 2px 4px #000;
-        padding: 100px 0;
-      }
-      nav.navbar {
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      .gallery img {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 10px;
-      }
-      .gallery img:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      }
-      .filter-btn.active {
-        background-color: #343a40;
-        color: #fff;
-      }
-      .gallery-item {
-        display: none; /* 初期は非表示、JSで制御 */
-      }
-      footer {
-        background-color: #343a40;
-      }
-      .social-icons a {
-        color: white;
-        margin: 0 10px;
-        font-size: 1.4rem;
-      }
-      #scrollTopBtn {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        display: none;
-        z-index: 999;
-      }
-    </style>
+    <meta property="og:image" content="images/og-image.jpg" /> <meta name="twitter:card" content="summary_large_image" />
   </head>
 
   <body>
-    <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe
-        src="https://www.googletagmanager.com/ns.html?id=G-L26JXQLWJC"
-        height="0"
+        src="https://www.googletagmanager.com/ns.html?id=G-L26JXQLWJC" height="0"
         width="0"
         style="display:none;visibility:hidden"
       ></iframe>
     </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <!-- ヘッダー -->
     <header class="text-center">
       <div class="container">
         <h1 class="display-4">My PORTFOLIO</h1>
@@ -116,7 +61,6 @@
       </div>
     </header>
 
-    <!-- ナビゲーション -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
       <div class="container">
         <a class="navbar-brand" href="#">ホーム</a>
@@ -154,7 +98,6 @@
       🌙
     </button>
 
-    <!-- ギャラリー -->
     <section id="gallery" class="container my-5 gallery">
       <h2 class="text-center mb-4" data-aos="fade-up">作品ギャラリー</h2>
       <div class="text-center mb-4">
@@ -177,16 +120,16 @@
           ポートレート
         </button>
       </div>
-      <div class="row" id="galleryContainer"></div>
+      <div class="row" id="galleryContainer">
+        </div>
     </section>
 
-    <!-- ブログ -->
     <section id="blog" class="container my-5">
       <h2 class="text-center mb-4" data-aos="fade-up">ブログ</h2>
-      <div class="list-group" id="blogList"></div>
+      <div class="list-group" id="blogList">
+        </div>
     </section>
 
-    <!-- お問い合わせ -->
     <section id="contact" class="container my-5 text-center">
       <h2 class="mb-4" data-aos="fade-up">お問い合わせ</h2>
       <p data-aos="fade-up" data-aos-delay="100">
@@ -197,127 +140,25 @@
       >
     </section>
 
-    <!-- スクロールトップ -->
     <button id="scrollTopBtn" class="btn btn-dark">↑ Top</button>
 
-    <!-- フッター -->
     <footer class="text-white text-center py-4">
       <p>&copy; 2025 キンキン. All Rights Reserved.</p>
       <div class="social-icons">
-        <a href="https://instagram.com" target="_blank"
+        <a href="https://instagram.com/kinn00kinn" target="_blank"
           ><i class="fab fa-instagram"></i
         ></a>
         <a href="https://twitter.com" target="_blank"
           ><i class="fab fa-twitter"></i
         ></a>
-        <a href="mailto:your@email.com"><i class="fas fa-envelope"></i></a>
-      </div>
+        <a href="mailto:your@email.com"><i class="fas fa-envelope"></i></a> </div>
     </footer>
 
-    <!-- JSライブラリ -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
-    <script>
-      AOS.init();
-
-      // ダークモード切替
-      document.getElementById("toggleDark").addEventListener("click", () => {
-        document.body.classList.toggle("dark-mode");
-      });
-
-      // スクロールトップボタン制御
-      const scrollBtn = document.getElementById("scrollTopBtn");
-      window.addEventListener("scroll", () => {
-        scrollBtn.style.display = window.scrollY > 100 ? "block" : "none";
-      });
-      scrollBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      // 画像情報
-      const images = [
-        { src: "images/IMG_7391.JPG", title: "風景1", category: "landscape" },
-        { src: "images/IMG_7406.JPG", title: "風景2", category: "landscape" },
-        { src: "images/IMG_7443.JPG", title: "風景3", category: "landscape" },
-        { src: "images/IMG_7558.JPG", title: "風景4", category: "landscape" },
-        { src: "images/IMG_7563.JPG", title: "風景5", category: "landscape" },
-        { src: "images/IMG_7596.JPG", title: "風景6", category: "landscape" },
-        { src: "images/IMG_7852.JPG", title: "風景7", category: "landscape" },
-        { src: "images/IMG_7889.JPG", title: "風景8", category: "landscape" },
-        {
-          src: "images/IMG_7933.JPG",
-          title: "ポートレート1",
-          category: "portrait",
-        },
-      ];
-
-      // ギャラリー生成
-      const galleryContainer = document.getElementById("galleryContainer");
-      images.forEach((img, idx) => {
-        const col = document.createElement("div");
-        col.className = "col-12 col-sm-6 col-md-4 mb-4 gallery-item";
-        col.dataset.category = img.category;
-        col.dataset.aos = "zoom-in";
-        col.dataset.aosDelay = idx * 100;
-        col.innerHTML = `
-          <a href="${img.src}" data-lightbox="gallery" data-title="${img.title}">
-            <img src="${img.src}" class="img-fluid" width="400" height="300" alt="${img.title}" loading="lazy" />
-          </a>
-        `;
-        galleryContainer.appendChild(col);
-      });
-
-      // 初期表示（すべて）
-      function filterImages(category) {
-        document.querySelectorAll(".gallery-item").forEach((item) => {
-          item.style.display =
-            category === "all" || item.dataset.category === category
-              ? "block"
-              : "none";
-        });
-      }
-      filterImages("all");
-
-      // フィルタボタン制御
-      document.querySelectorAll(".filter-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          document
-            .querySelectorAll(".filter-btn")
-            .forEach((btn) => btn.classList.remove("active"));
-          button.classList.add("active");
-          const category = button.getAttribute("data-category");
-          filterImages(category);
-        });
-      });
-
-      // ブログ読み込み
-      const blogs = [
-        {
-          href: "blog/post1.html",
-          title: "京都での撮影紀行",
-          date: "2025年4月10日",
-          desc: "春の京都での撮影旅を綴ったエッセイ",
-        },
-        {
-          href: "blog/post2.html",
-          title: "モノクロ写真の魅力",
-          date: "2025年3月20日",
-          desc: "色のない世界で表現する感情とは",
-        },
-      ];
-      const blogList = document.getElementById("blogList");
-      blogs.forEach((blog, idx) => {
-        const a = document.createElement("a");
-        a.className = "list-group-item list-group-item-action";
-        a.href = blog.href;
-        a.dataset.aos = "fade-right";
-        a.dataset.aosDelay = idx * 100;
-        a.innerHTML = `<h5 class="mb-1">${blog.title}</h5><small>${blog.date}</small><p class="mb-1">${blog.desc}</p>`;
-        blogList.appendChild(a);
-      });
-    </script>
+    <script src="script.js" defer></script>
   </body>
 </html>

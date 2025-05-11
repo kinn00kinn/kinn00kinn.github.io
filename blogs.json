@@ -1,0 +1,23 @@
+[
+    {
+      "id": "post1",
+      "title": "京都での撮影紀行",
+      "date": "2025年4月10日",
+      "desc": "春の京都での撮影旅を綴ったエッセイ。Markdownで書きました。",
+      "mdFile": "post1.md"
+    },
+    {
+      "id": "post2",
+      "title": "モノクロ写真の魅力",
+      "date": "2025年3月20日",
+      "desc": "色のない世界で表現する感情とは。Markdownで更新。",
+      "mdFile": "post2.md"
+    },
+    {
+      "id": "post3",
+      "title": "新しいカメラとレンズのレビュー",
+      "date": "2025年5月1日",
+      "desc": "最新機材の使用感や作例をMarkdownで紹介します。",
+      "mdFile": "post3.md"
+    }
+  ]
