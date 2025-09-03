@@ -36,43 +36,68 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 画像情報 (将来的にはこれもJSONファイルから読み込むとより管理しやすくなります)
-  const images = [
-    { src: "images/IMG_7391.webp", title: "交通量の多いタイの道路", category: "landscape" },
-    { src: "images/IMG_7406.webp", title: "雨が明けたタイの繁華街", category: "landscape" },
-    { src: "images/IMG_7443.webp", title: "タイの古い寺院", category: "landscape" },
-    { src: "images/IMG_7558.webp", title: "朝日とアンコールワット", category: "landscape" },
-    { src: "images/IMG_7563.webp", title: "カンボジアの朝は早い", category: "landscape" },
-    { src: "images/IMG_7596.webp", title: "正面に佇むアンコールワット", category: "landscape" },
-    { src: "images/IMG_7852.webp", title: "ホーチミン広場", category: "landscape" },
-    { src: "images/IMG_7889.webp", title: "ベトナム戦争博物館で展示されているかつて使われた戦闘機", category: "landscape" },
-    {
-      src: "images/IMG_7933.webp",
-      title: "ニャチャンのビーチ",
-      category: "portrait",
-    },
-  ];
-
-  // ギャラリー生成
-  const galleryContainer = document.getElementById("galleryContainer");
-  if (galleryContainer) {
-    // 要素が存在するか確認
-    images.forEach((img, idx) => {
-      const col = document.createElement("div");
-      col.className = "col-12 col-sm-6 col-md-4 mb-4 gallery-item";
-      col.dataset.category = img.category;
-      col.dataset.aos = "zoom-in";
-      col.dataset.aosDelay = idx * 100; // AOSのアニメーション遅延をインデックスに基づいて設定
-      col.innerHTML = `
-          <a href="${img.src}" data-lightbox="gallery" data-title="${img.title}">
-            <img src="${img.src}" class="img-fluid" width="400" height="300" alt="${img.title}" loading="lazy" />
-          </a>
-        `;
-      galleryContainer.appendChild(col);
-    });
+  // Seeded random number generator function
+  function createSeededRandom(seed) {
+    let state = seed;
+    return function() {
+      state = (state * 9301 + 49297) % 233280;
+      return state / 233280;
+    };
   }
 
-  // 初期表示（すべて）とフィルタリング関数
+  // ギャラリー生成
+  async function loadGallery() {
+    const galleryContainer = document.getElementById("galleryContainer");
+    if (!galleryContainer) return;
+
+    try {
+      const response = await fetch("gallery.json");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const images = await response.json();
+      galleryContainer.innerHTML = ""; // 既存のギャラリーをクリア
+
+      const seededRandom = createSeededRandom(images.length); // Use image count as a seed
+
+      images.forEach((img, idx) => {
+        const compressedSrc = img.src.replace("images/", "images_compressed/").replace(/\.[^/.]+$/, "") + ".webp";
+        const col = document.createElement("div");
+        
+        // Base class
+        let classList = ['gallery-item'];
+
+        // Add random size classes based on the seeded RNG
+        const r = seededRandom();
+        if (r < 0.1) { // 10% chance for large
+          classList.push('is-large');
+        } else if (r < 0.2) { // 10% chance for wide
+          classList.push('is-wide');
+        } else if (r < 0.4) { // 20% chance for tall
+          classList.push('is-tall');
+        }
+        // Otherwise (60% chance), it remains a standard 1x1 tile
+
+        col.className = classList.join(' ');
+        col.dataset.category = img.category;
+        col.dataset.aos = "zoom-in";
+
+        col.innerHTML = `
+          <a href="${compressedSrc}" data-lightbox="gallery" data-title="${img.title}">
+            <img src="${compressedSrc}" class="img-fluid" alt="${img.title}" loading="lazy" />
+          </a>
+        `;
+        galleryContainer.appendChild(col);
+      });
+
+      filterImages("all"); // 初期はすべての画像を表示
+    } catch (error) {
+      console.error("ギャラリーの読み込みに失敗しました:", error);
+      galleryContainer.innerHTML = '<p class="text-danger">ギャラリーの読み込みに失敗しました。</p>';
+    }
+  }
+
+  // フィルタリング関数
   function filterImages(category) {
     document.querySelectorAll(".gallery-item").forEach((item) => {
       item.style.display =
@@ -80,11 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "block"
           : "none";
     });
-  }
-
-  if (galleryContainer) {
-    // ギャラリーコンテナがある場合のみ実行
-    filterImages("all"); // 初期はすべての画像を表示
   }
 
   // フィルタボタン制御
@@ -139,5 +159,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  loadGallery(); // ギャラリーをロード
   loadBlogs(); // ページ読み込み時にブログをロード
 });
