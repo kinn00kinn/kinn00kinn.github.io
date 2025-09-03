@@ -21,17 +21,31 @@
 
 ### 🐍 管理用スクリプト (`manage.py`)
 
-日々のコンテンツ管理を効率化するため、Python製のCLIツール `manage.py` を導入しました。
+日々のコンテンツ管理を効率化するため、Python製のCLIツール `manage.py` を導入しました。画像圧縮、ギャラリー更新、ブログ投稿がコマンド一つで実行できます。
 
-#### 1. 画像の一括圧縮
+#### 1. 画像の圧縮とギャラリー更新
 
-`images` フォルダ内の元画像を圧縮し、`images_compressed` フォルダに`.webp`形式で保存します。サイトではこの圧縮後の画像が使用されます。
+新しい画像を `images` フォルダに追加した後、このコマンドを実行します。画像の圧縮とギャラリーへの追加が一度に行われます。
 
 ```bash
 python manage.py compress
 ```
 
-#### 2. 新規ブログ記事の追加
+- **処理内容:**
+  - `images` フォルダ内の新しい画像を探索し、軽量な `.webp` 形式に圧縮します。
+  - **プライバシー保護のため、位置情報などのEXIFデータは自動的に削除されます。**
+  - 圧縮された画像は `images_compressed` に保存されます。
+  - `gallery.json` が自動更新され、新しい画像がギャラリーの先頭に追加されます。
+
+#### 2. ギャラリーの手動更新
+
+`images_compressed` フォルダ内をスキャンし、`gallery.json` に未登録の画像を追加します。
+
+```bash
+python manage.py update
+```
+
+#### 3. 新規ブログ記事の追加
 
 Markdownファイルから新しいブログ記事を簡単に追加できます。
 
@@ -39,12 +53,6 @@ Markdownファイルから新しいブログ記事を簡単に追加できます
 ```bash
 python manage.py addpost "Markdownファイルのパス" "記事のタイトル" "記事の短い説明"
 ```
-
-**実行例:**
-```bash
-python manage.py addpost "C:\Users\haruk\Documents\new-post.md" "新しい旅の記録" "先日訪れた場所での素晴らしい体験について。"
-```
-実行後、`blogs.json`が更新され、Markdownファイルは自動で`blog/md/`に移動します。
 
 ---
 
@@ -62,24 +70,18 @@ python manage.py addpost "C:\Users\haruk\Documents\new-post.md" "新しい旅の
 
 ---
 
-### 🚀 セットアップ手順
+### 🚀 コンテンツの管理方法
 
-1.  このリポジリをクローンします。
-    ```bash
-    git clone https://github.com/kinn00kinn/portfolio.github.io
-    cd portfolio.github.io
-    ```
+#### ギャラリーに写真を追加する
 
-2.  管理スクリプト用のPythonライブラリをインストールします。
-    ```bash
-    pip install Pillow
-    ```
+1.  新しい画像ファイルを `images` フォルダにコピーします。
+2.  ターミナルで `python manage.py compress` を実行します。
+3.  `gallery.json` を開き、自動で追加された新しい画像の `title` と `category` を編集します。（カテゴリの初期値は `new` です）
 
-3.  新しい画像は `images/` に追加し、`python manage.py compress` を実行して圧縮します。
+#### ブログ記事を投稿する
 
-4.  新しいブログ記事はMarkdownで作成し、`python manage.py addpost ...` で追加します。
-
-5.  任意のローカルサーバーで `index.html` を開いて確認します。（例：VSCode + Live Server）
+1.  記事内容を記述したMarkdownファイル（`.md`）を用意します。
+2.  ターミナルで `python manage.py addpost ...` コマンドを実行し、Markdownファイル・タイトル・説明を登録します。
 
 ---
 

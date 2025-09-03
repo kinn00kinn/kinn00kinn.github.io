@@ -14,6 +14,63 @@ COMPRESSION_QUALITY = 85
 
 # --- Functions ---
 
+def update_gallery():
+    """
+    Scans the compressed images directory and adds any new images to the gallery.json file.
+    """
+    print("\nUpdating gallery.json...")
+    if not os.path.exists(BLOGS_JSON_PATH):
+        print(f"Error: {BLOGS_JSON_PATH} not found.")
+        return
+
+    try:
+        with open("gallery.json", 'r', encoding='utf-8') as f:
+            gallery_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        gallery_data = []
+
+    existing_files = {os.path.basename(item['src']) for item in gallery_data}
+    new_images_added = 0
+
+    if not os.path.exists(COMPRESSED_DIR):
+        print(f"Compressed directory '{COMPRESSED_DIR}' not found. Nothing to update.")
+        return
+
+    for filename in os.listdir(COMPRESSED_DIR):
+        if filename not in existing_files:
+            # Assumes original file was in IMAGES_DIR with a different extension
+            # We need to find the original to guess the name, but let's just use the webp name
+            original_src_path = os.path.join(IMAGES_DIR, filename).replace('.webp', '')
+            
+            # Find a matching original file (e.g. .jpg, .png)
+            original_filename = None
+            for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']:
+                potential_original = os.path.splitext(filename)[0] + ext
+                if os.path.exists(os.path.join(IMAGES_DIR, potential_original)):
+                    original_filename = potential_original
+                    break
+            
+            if original_filename is None:
+                print(f"Could not find original image for {filename}, skipping.")
+                continue
+
+            new_entry = {
+                "src": f"images_compressed/{filename}",
+                "title": os.path.splitext(filename)[0], # Use filename as title
+                "category": "new" # Default category
+            }
+            gallery_data.insert(0, new_entry) # Add to the top
+            print(f"Added new image to gallery: {filename}")
+            new_images_added += 1
+
+    if new_images_added > 0:
+        with open("gallery.json", 'w', encoding='utf-8') as f:
+            json.dump(gallery_data, f, indent=2, ensure_ascii=False)
+        print(f"\nSuccessfully added {new_images_added} new images to gallery.json.")
+        print("Please review gallery.json to update titles and categories.")
+    else:
+        print("No new images found to add to the gallery.")
+
 def compress_images():
     """
     Compresses images from the source directory and saves them to the destination directory.
@@ -53,6 +110,9 @@ def compress_images():
         print("No new images to compress.")
     else:
         print(f"\nImage compression complete. Compressed {compressed_count} new images.")
+    
+    # Automatically update the gallery after compression
+    update_gallery()
 
 
 def add_blog_post(md_file_path, title, description):
@@ -110,7 +170,10 @@ def main():
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
     # 'compress' command
-    parser_compress = subparsers.add_parser('compress', help='Compress all images in the images/ directory.')
+    parser_compress = subparsers.add_parser('compress', help='Compress all images and update the gallery.')
+
+    # 'update' command
+    parser_update = subparsers.add_parser('update', help='Update gallery.json with new images found in the compressed folder.')
     
     # 'addpost' command
     parser_addpost = subparsers.add_parser('addpost', help='Add a new blog post.')
@@ -122,6 +185,8 @@ def main():
 
     if args.command == 'compress':
         compress_images()
+    elif args.command == 'update':
+        update_gallery()
     elif args.command == 'addpost':
         add_blog_post(args.mdfile, args.title, args.description)
     else:

@@ -2,39 +2,29 @@ function generateTOC() {
   const articleBody = document.getElementById("article-body");
   const headings = articleBody.querySelectorAll("h2, h3");
   if (headings.length === 0) return;
-
   const tocContainer = document.createElement("nav");
-  tocContainer.className = "mb-4 toc"; // Add .toc class
+  tocContainer.className = "mb-4 toc"; 
   tocContainer.innerHTML = "<h3>目次</h3>";
-
   const ul = document.createElement("ul");
   ul.className = "list-unstyled";
-
   headings.forEach((heading, i) => {
     const id = `toc-${i}`;
     heading.id = id;
-
     const li = document.createElement("li");
     li.style.marginLeft = heading.tagName === "H3" ? "1rem" : "0";
     li.innerHTML = `<a href="#${id}">${heading.textContent}</a>`;
     ul.appendChild(li);
   });
-
   tocContainer.appendChild(ul);
-
   const articleElement = document.getElementById("blog-article-content");
   const dateElem = document.getElementById("article-date");
-
   if (articleElement && dateElem && dateElem.parentNode === articleElement) {
     articleElement.insertBefore(tocContainer, dateElem.nextSibling);
   }
 }
-
 document.addEventListener("DOMContentLoaded", async () => {
-  // Dark mode logic
   const toggleDarkButtonBlog = document.getElementById("toggleDarkBlog");
   const currentThemeBlog = localStorage.getItem("theme");
-
   function applyTheme(theme) {
     if (theme === "dark") {
       document.body.classList.add("dark-mode");
@@ -45,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
   applyTheme(currentThemeBlog);
-
   if (toggleDarkButtonBlog) {
     toggleDarkButtonBlog.addEventListener("click", () => {
       document.body.classList.toggle("dark-mode");
@@ -56,38 +45,49 @@ document.addEventListener("DOMContentLoaded", async () => {
       applyTheme(theme);
     });
   }
-
-  // Load blog content
   const params = new URLSearchParams(window.location.search);
   const mdFileId = params.get("id");
-
   if (mdFileId) {
     try {
       const responseMeta = await fetch("blogs.json");
       if (!responseMeta.ok) throw new Error("Blog metadata not found");
       const blogs = await responseMeta.json();
       const postMeta = blogs.find((blog) => blog.id === mdFileId);
-
       if (!postMeta) throw new Error("Post not found");
-
       document.title = postMeta.title + " - 写真ポートフォリオ";
       document.getElementById("blog-title-breadcrumb").textContent = postMeta.title;
       document.getElementById("article-title").textContent = postMeta.title;
       document.getElementById("article-date").textContent = "公開日: " + postMeta.date;
-
       const responseMd = await fetch(`blog/md/${postMeta.mdFile}`);
       if (!responseMd.ok) throw new Error(`Markdown file not found`);
       const markdownText = await responseMd.text();
-
       const rawHtml = marked.parse(markdownText);
       const articleBody = document.getElementById("article-body");
-
-      // Create a temporary container to parse the HTML string
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = rawHtml;
-
-      // Find all images and apply width constraints if specified in the URL hash
       tempDiv.querySelectorAll('img').forEach(img => {
+        if (img.src.includes('/images/')) {
+            try {
+                const originalUrl = new URL(img.src);
+                const imageName = originalUrl.pathname.split('/').pop();
+                const baseName = imageName.substring(0, imageName.lastIndexOf('.'));
+                const hash = originalUrl.hash;
+                originalUrl.pathname = `/images_compressed/${baseName}.webp`;
+                img.src = originalUrl.pathname + hash;
+            } catch (e) {
+                const srcParts = img.src.split('#');
+                const pathWithoutHash = srcParts[0];
+                const hash = srcParts.length > 1 ? '#' + srcParts[1] : '';
+                const pathPartsBasedOnImages = pathWithoutHash.split('images/');
+                if (pathPartsBasedOnImages.length > 1) {
+                    const imageName = pathPartsBasedOnImages[1];
+                    const baseName = imageName.substring(0, imageName.lastIndexOf('.'));
+                    img.src = `images_compressed/${baseName}.webp` + hash;
+                }
+            }
+        }
+        img.loading = 'lazy';
+        img.decoding = 'async';
         try {
           const url = new URL(img.src);
           const hash = url.hash;
@@ -96,14 +96,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (width && !isNaN(width)) {
               img.style.maxWidth = `${width}px`;
               img.style.height = 'auto';
-              img.style.display = 'block'; // Center the image
+              img.style.display = 'block'; 
               img.style.marginLeft = 'auto';
               img.style.marginRight = 'auto';
             }
           }
         } catch (e) {
-          // Ignore errors for invalid URLs (e.g., relative paths during local dev)
-          // The logic for hash parsing on relative paths needs to be more robust
           const srcParts = img.src.split('#');
           if (srcParts.length > 1) {
             const hash = srcParts[1];
@@ -120,7 +118,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           }
         }
       });
-
       articleBody.innerHTML = tempDiv.innerHTML;
       generateTOC();
     } catch (error) {
