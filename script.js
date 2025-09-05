@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         col.dataset.category = img.category;
         col.dataset.aos = "zoom-in";
         col.innerHTML = `
-          <a href="${compressedSrc}" data-lightbox="gallery" data-title="${img.title}">
+          <a href="${img.original_src || compressedSrc}" data-lightbox="gallery" data-title="${img.title}">
             <img src="${compressedSrc}" class="img-fluid" alt="${img.title}" loading="lazy" decoding="async" />
           </a>
         `;

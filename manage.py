@@ -10,9 +10,50 @@ IMAGES_DIR = 'images'
 COMPRESSED_DIR = 'images_compressed'
 BLOGS_JSON_PATH = 'blogs.json'
 MD_DIR = os.path.join('blog', 'md')
-COMPRESSION_QUALITY = 85
+COMPRESSION_QUALITY = 60
 
 # --- Functions ---
+
+def migrate_gallery_add_original_src():
+    """
+    Updates existing gallery.json entries to include the 'original_src' field.
+    """
+    print("\nMigrating gallery.json to add 'original_src'...")
+    try:
+        with open("gallery.json", 'r', encoding='utf-8') as f:
+            gallery_data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        print("gallery.json not found or is invalid.")
+        return
+
+    updated_count = 0
+    for item in gallery_data:
+        if 'original_src' not in item or not item['original_src']:
+            compressed_filename = os.path.basename(item['src'])
+            base_name = os.path.splitext(compressed_filename)[0]
+            
+            original_filename = None
+            # Search for the original file with various extensions
+            for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG']:
+                potential_original = base_name + ext
+                if os.path.exists(os.path.join(IMAGES_DIR, potential_original)):
+                    original_filename = potential_original
+                    break
+            
+            if original_filename:
+                item['original_src'] = os.path.join(IMAGES_DIR, original_filename).replace('\\', '/')
+                updated_count += 1
+                print(f"Updated {compressed_filename} with original_src: {item['original_src']}")
+            else:
+                print(f"Could not find original image for {compressed_filename}, skipping.")
+
+    if updated_count > 0:
+        with open("gallery.json", 'w', encoding='utf-8') as f:
+            json.dump(gallery_data, f, indent=2, ensure_ascii=False)
+        print(f"\nSuccessfully migrated {updated_count} entries in gallery.json.")
+    else:
+        print("No entries needed migration.")
+
 
 def update_gallery():
     """
@@ -38,24 +79,20 @@ def update_gallery():
 
     for filename in os.listdir(COMPRESSED_DIR):
         if filename not in existing_files:
-            # Assumes original file was in IMAGES_DIR with a different extension
-            # We need to find the original to guess the name, but let's just use the webp name
-            original_src_path = os.path.join(IMAGES_DIR, filename).replace('.webp', '')
-            
-            # Find a matching original file (e.g. .jpg, .png)
-            original_filename = None
-            for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp']:
+            original_filename_found = None
+            for ext in ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.JPG']:
                 potential_original = os.path.splitext(filename)[0] + ext
                 if os.path.exists(os.path.join(IMAGES_DIR, potential_original)):
-                    original_filename = potential_original
+                    original_filename_found = potential_original
                     break
             
-            if original_filename is None:
+            if original_filename_found is None:
                 print(f"Could not find original image for {filename}, skipping.")
                 continue
 
             new_entry = {
                 "src": f"images_compressed/{filename}",
+                "original_src": f"images/{original_filename_found}",
                 "title": os.path.splitext(filename)[0], # Use filename as title
                 "category": "new" # Default category
             }
@@ -83,23 +120,19 @@ def compress_images():
     compressed_count = 0
     for filename in os.listdir(IMAGES_DIR):
         source_path = os.path.join(IMAGES_DIR, filename)
-        dest_path = os.path.join(COMPRESSED_DIR, filename.split('.')[0] + '.webp')
+        dest_path = os.path.join(COMPRESSED_DIR, os.path.splitext(filename)[0] + '.webp')
 
-        # Skip non-file items
         if not os.path.isfile(source_path):
             continue
         
-        # Skip if compressed version already exists
         if os.path.exists(dest_path):
             continue
 
         try:
             with Image.open(source_path) as img:
-                # EXIF情報を保持せずにRGBに変換
                 if img.mode in ('RGBA', 'P'):
                     img = img.convert('RGB')
                 
-                # EXIFデータを引き継がずに保存
                 img.save(dest_path, 'webp', quality=COMPRESSION_QUALITY, exif=b'')
                 print(f"Compressed and saved (EXIF stripped): {dest_path}")
                 compressed_count += 1
@@ -111,7 +144,6 @@ def compress_images():
     else:
         print(f"\nImage compression complete. Compressed {compressed_count} new images.")
     
-    # Automatically update the gallery after compression
     update_gallery()
 
 
@@ -123,35 +155,29 @@ def add_blog_post(md_file_path, title, description):
         print(f"Error: Markdown file not found at '{md_file_path}'")
         return
 
-    # Load existing blog data
     with open(BLOGS_JSON_PATH, 'r', encoding='utf-8') as f:
         blogs = json.load(f)
 
-    # Generate new post details
     new_id = f"post{len(blogs) + 1}"
     md_filename = os.path.basename(md_file_path)
     new_md_path = os.path.join(MD_DIR, md_filename)
     
-    # Check for duplicate md file
     if any(post['mdFile'] == md_filename for post in blogs):
         print(f"Error: A blog post with the markdown file '{md_filename}' already exists.")
         return
 
-    # Create new post object
     new_post = {
         "id": new_id,
         "title": title,
-        "date": datetime.now().strftime('%Y年%m月%d日'), # YYYY年MM月DD日 format
+        "date": datetime.now().strftime('%Y年%m月%d日'),
         "desc": description,
         "mdFile": md_filename
     }
 
-    # Add to list and save
-    blogs.insert(0, new_post) # Add to the beginning of the list
+    blogs.insert(0, new_post)
     with open(BLOGS_JSON_PATH, 'w', encoding='utf-8') as f:
         json.dump(blogs, f, indent=4, ensure_ascii=False)
 
-    # Move the markdown file
     if not os.path.exists(MD_DIR):
         os.makedirs(MD_DIR)
     shutil.move(md_file_path, new_md_path)
@@ -169,17 +195,15 @@ def main():
     parser = argparse.ArgumentParser(description="Manage your blog and images.")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    # 'compress' command
     parser_compress = subparsers.add_parser('compress', help='Compress all images and update the gallery.')
-
-    # 'update' command
     parser_update = subparsers.add_parser('update', help='Update gallery.json with new images found in the compressed folder.')
     
-    # 'addpost' command
     parser_addpost = subparsers.add_parser('addpost', help='Add a new blog post.')
     parser_addpost.add_argument('mdfile', type=str, help='Path to the new markdown file.')
     parser_addpost.add_argument('title', type=str, help='The title of the blog post.')
     parser_addpost.add_argument('description', type=str, help='A short description of the post.')
+
+    parser_migrate = subparsers.add_parser('migrate', help='Migrate gallery.json to add original_src fields.')
 
     args = parser.parse_args()
 
@@ -189,6 +213,8 @@ def main():
         update_gallery()
     elif args.command == 'addpost':
         add_blog_post(args.mdfile, args.title, args.description)
+    elif args.command == 'migrate':
+        migrate_gallery_add_original_src()
     else:
         parser.print_help()
 
