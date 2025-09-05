@@ -10,7 +10,7 @@ IMAGES_DIR = 'images'
 COMPRESSED_DIR = 'images_compressed'
 BLOGS_JSON_PATH = 'blogs.json'
 MD_DIR = os.path.join('blog', 'md')
-COMPRESSION_QUALITY = 60
+COMPRESSION_QUALITY = 40
 
 # --- Functions ---
 
