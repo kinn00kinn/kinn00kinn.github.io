@@ -45,7 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const images = await response.json();
       galleryContainer.innerHTML = ""; 
-      const seededRandom = createSeededRandom(images.length); 
+      var now_tiem = new Date();
+      const seededRandom = createSeededRandom(now_tiem.getMilliseconds()); 
       images.forEach((img, idx) => {
         const compressedSrc = img.src; 
         const col = document.createElement("div");
