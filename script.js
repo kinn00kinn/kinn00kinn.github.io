@@ -1,108 +1,188 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // AOSライブラリの初期化
   AOS.init();
-  const toggleDarkButton = document.getElementById("toggleDark");
-  const currentTheme = localStorage.getItem("theme");
-  if (currentTheme === "dark") {
-    document.body.classList.add("dark-mode");
-    toggleDarkButton.textContent = "☀️";
-  } else {
-    toggleDarkButton.textContent = "🌙";
-  }
-  toggleDarkButton.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-    let theme = "light";
-    if (document.body.classList.contains("dark-mode")) {
-      theme = "dark";
-      toggleDarkButton.textContent = "☀️";
-    } else {
-      toggleDarkButton.textContent = "🌙";
-    }
-    localStorage.setItem("theme", theme);
-  });
-  const scrollBtn = document.getElementById("scrollTopBtn");
-  if (scrollBtn) {
-    window.addEventListener("scroll", () => {
-      scrollBtn.style.display = window.scrollY > 100 ? "block" : "none";
-    });
-    scrollBtn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
-  }
+
+  /**
+   * ユーティリティ：シード値に基づく疑似乱数生成器を作成
+   * @param {number} seed - 乱数のシード値
+   * @returns {function(): number} 0から1の間の乱数を返す関数
+   */
   function createSeededRandom(seed) {
     let state = seed;
-    return function() {
+    return function () {
       state = (state * 9301 + 49297) % 233280;
       return state / 233280;
     };
   }
+
+  /**
+   * ダークモードの切り替え機能をセットアップ
+   */
+  function setupThemeToggle() {
+    const toggleDarkButton = document.getElementById("toggleDark");
+    if (!toggleDarkButton) return;
+
+    // テーマを適用する共通関数
+    const applyTheme = (theme) => {
+      if (theme === "dark") {
+        document.body.classList.add("dark-mode");
+        toggleDarkButton.textContent = "☀️";
+      } else {
+        document.body.classList.remove("dark-mode");
+        toggleDarkButton.textContent = "🌙";
+      }
+    };
+
+    // ページ読み込み時に保存されたテーマを適用
+    const savedTheme = localStorage.getItem("theme") || "light";
+    applyTheme(savedTheme);
+
+    // ボタンクリック時のイベント
+    toggleDarkButton.addEventListener("click", () => {
+      const newTheme = document.body.classList.contains("dark-mode")
+        ? "light"
+        : "dark";
+      applyTheme(newTheme);
+      localStorage.setItem("theme", newTheme);
+    });
+  }
+
+  /**
+   * 「トップへ戻る」ボタンの機能をセットアップ
+   */
+  function setupScrollTopButton() {
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    if (!scrollBtn) return;
+
+    window.addEventListener("scroll", () => {
+      scrollBtn.style.display = window.scrollY > 100 ? "block" : "none";
+    });
+
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  /**
+   * ギャラリーのフィルター機能をセットアップ
+   */
+  function setupGalleryFilters() {
+    const filterButtons = document.querySelectorAll(".filter-btn");
+
+    // フィルターボタンがない場合は何もしない
+    if (filterButtons.length === 0) return;
+
+    const galleryItems = document.querySelectorAll(".gallery-item");
+
+    const filterImages = (category) => {
+      galleryItems.forEach((item) => {
+        const isVisible =
+          category === "all" || item.dataset.category === category;
+        item.style.display = isVisible ? "block" : "none";
+      });
+    };
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        // 全てのボタンから 'active' クラスを削除
+        filterButtons.forEach((btn) => btn.classList.remove("active"));
+        // クリックされたボタンに 'active' クラスを追加
+        button.classList.add("active");
+
+        const category = button.getAttribute("data-category");
+        filterImages(category);
+      });
+    });
+  }
+
+  /**
+   * ギャラリーの画像を非同期で読み込む
+   */
   async function loadGallery() {
     const galleryContainer = document.getElementById("galleryContainer");
     if (!galleryContainer) return;
+
     try {
-      const response = await fetch("gallery.json");
+      const response = await fetch("gallery.json"); // あなたのJSONファイルを指定
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const images = await response.json();
-      galleryContainer.innerHTML = ""; 
-      var now_tiem = new Date();
-      const seededRandom = createSeededRandom(now_tiem.getMilliseconds()); 
-      images.forEach((img, idx) => {
-        const compressedSrc = img.src; 
-        const col = document.createElement("div");
-        let classList = ['gallery-item'];
-        const r = seededRandom();
-        if (r < 0.1) { 
-          classList.push('is-large');
-        } else if (r < 0.2) { 
-          classList.push('is-wide');
-        } else if (r < 0.4) { 
-          classList.push('is-tall');
+
+      // --- ▼ 修正箇所 ▼ ---
+
+      // 重複をチェック（original_srcを基準にする）
+      const seenUrls = new Set();
+      const uniqueImages = images.filter((img) => {
+        // original_srcをユニークなキーとして使用
+        const uniqueKey = img.original_src;
+        // キーが存在しないか、既にSetにあれば除外
+        if (!uniqueKey || seenUrls.has(uniqueKey)) {
+          return false;
+        } else {
+          seenUrls.add(uniqueKey);
+          return true;
         }
-        col.className = classList.join(' ');
+      });
+
+      galleryContainer.innerHTML = ""; // コンテナをクリア
+      const seededRandom = createSeededRandom(Date.now());
+      const fragment = document.createDocumentFragment();
+
+      uniqueImages.forEach((img) => {
+        const col = document.createElement("div");
+
+        const r = seededRandom();
+        let sizeClass = "";
+        if (r < 0.1) sizeClass = "is-large";
+        else if (r < 0.2) sizeClass = "is-wide";
+        else if (r < 0.4) sizeClass = "is-tall";
+
+        col.className = `gallery-item ${sizeClass}`.trim();
         col.dataset.category = img.category;
         col.dataset.aos = "zoom-in";
+
+        // JSONのキーに合わせてパスを割り当てる
+        const thumbnailUrl = img.src; // <img>タグ用の圧縮画像パス
+        const fullUrl = img.original_src; // <a>タグ用のオリジナル画像パス
+
         col.innerHTML = `
-          <a href="${img.src || compressedSrc}" data-lightbox="gallery" data-title="${img.title}">
-            <img src="${compressedSrc}" class="img-fluid" alt="${img.title}" loading="lazy" decoding="async" />
-          </a>
-        `;
-        galleryContainer.appendChild(col);
+        <a href="${fullUrl}" data-lightbox="gallery" data-title="${img.title}">
+          <img src="${thumbnailUrl}" class="img-fluid" alt="${img.title}" loading="lazy" decoding="async" />
+        </a>
+      `;
+        fragment.appendChild(col);
       });
-      filterImages("all"); 
+
+      galleryContainer.appendChild(fragment);
+      // フィルター機能のセットアップを忘れずに呼び出す
+      setupGalleryFilters();
+
+      // --- ▲ 修正ここまで ▲ ---
     } catch (error) {
       console.error("ギャラリーの読み込みに失敗しました:", error);
-      galleryContainer.innerHTML = '<p class="text-danger">ギャラリーの読み込みに失敗しました。</p>';
+      galleryContainer.innerHTML =
+        '<p class="text-danger">ギャラリーの読み込みに失敗しました。</p>';
     }
   }
-  function filterImages(category) {
-    document.querySelectorAll(".gallery-item").forEach((item) => {
-      item.style.display =
-        category === "all" || item.dataset.category === category
-          ? "block"
-          : "none";
-    });
-  }
-  document.querySelectorAll(".filter-btn").forEach((button) => {
-    button.addEventListener("click", () => {
-      document
-        .querySelectorAll(".filter-btn")
-        .forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-      const category = button.getAttribute("data-category");
-      filterImages(category);
-    });
-  });
+
+  /**
+   * ブログ記事一覧を非同期で読み込む
+   */
   async function loadBlogs() {
     const blogList = document.getElementById("blogList");
     if (!blogList) return;
+
     try {
       const response = await fetch("blogs.json");
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const blogs = await response.json();
-      blogList.innerHTML = ""; 
+
+      blogList.innerHTML = ""; // リストをクリア
+
+      const fragment = document.createDocumentFragment();
       blogs.forEach((blog, idx) => {
         const a = document.createElement("a");
         a.className = "list-group-item list-group-item-action";
@@ -110,22 +190,25 @@ document.addEventListener("DOMContentLoaded", () => {
         a.dataset.aos = "fade-right";
         a.dataset.aosDelay = idx * 100;
         a.innerHTML = `
-              <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">${blog.title}</h5>
-                <small>${blog.date}</small>
-              </div>
-              <p class="mb-1">${blog.desc}</p>
-            `;
-        blogList.appendChild(a);
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">${blog.title}</h5>
+            <small>${blog.date}</small>
+          </div>
+          <p class="mb-1">${blog.desc}</p>
+        `;
+        fragment.appendChild(a);
       });
+      blogList.appendChild(fragment);
     } catch (error) {
       console.error("ブログ記事の読み込みに失敗しました:", error);
-      if (blogList) {
-        blogList.innerHTML =
-          '<p class="text-danger">ブログ記事の読み込みに失敗しました。しばらくしてから再度お試しください。</p>';
-      }
+      blogList.innerHTML =
+        '<p class="text-danger">ブログ記事の読み込みに失敗しました。</p>';
     }
   }
-  loadGallery(); 
-  loadBlogs(); 
+
+  // 各機能の初期化
+  setupThemeToggle();
+  setupScrollTopButton();
+  loadGallery();
+  loadBlogs();
 });
