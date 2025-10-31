@@ -206,9 +206,42 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  /**
+   * プロフィールカードの表示制御をセットアップ
+   */
+  function setupProfileCard() {
+    const profileCard = document.getElementById('profileCard');
+    if (!profileCard) return;
+
+    let lastScrollY = window.scrollY;
+    const showThreshold = 300; // スクロール開始位置
+
+    window.addEventListener('scroll', () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > showThreshold) {
+        profileCard.style.display = 'block';
+        if (currentScrollY > lastScrollY) {
+          // 下スクロール時
+          profileCard.style.transform = 'translateY(20px)';
+          profileCard.style.opacity = '0';
+        } else {
+          // 上スクロール時
+          profileCard.style.transform = 'translateY(0)';
+          profileCard.style.opacity = '1';
+        }
+      } else {
+        profileCard.style.display = 'none';
+      }
+      
+      lastScrollY = currentScrollY;
+    });
+  }
+
   // 各機能の初期化
   setupThemeToggle();
   setupScrollTopButton();
+  setupProfileCard();
   loadGallery();
   loadBlogs();
 });

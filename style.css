@@ -1,20 +1,93 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+JP:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Noto+Sans+JP:wght@400;500&family=Lora:ital@0;1&family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
 
-/* === 基本設定：全体に柔らかさと余白を === */
+/* === 基本設定：洗練された背景とアニメーション === */
 body {
-  font-family: 'Noto Sans JP', sans-serif;
-  /* font-weight: 500;  少し太くして視認性を上げるのもおすすめです */
-  background-color: #f7f7f7; /* 変更：純粋な白からオフホワイトへ */
+  font-family: 'M PLUS Rounded 1c', 'Noto Sans JP', sans-serif;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(74, 105, 132, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(74, 105, 132, 0.03) 0%, transparent 50%),
+    linear-gradient(to bottom, #ffffff, #f8f9fa);
+  background-attachment: fixed;
   color: #333;
-  line-height: 1.7; /* 追加：行間を広げて読みやすく */
-  letter-spacing: 0.03em; /* 追加：文字間を少し広げて風合いを出す */
-  transition: background-color 0.4s ease, color 0.4s ease; /* 変更：トランジションを少し滑らかに */
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  transition: all 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(120deg, rgba(74, 105, 132, 0.03) 0%, transparent 50%),
+    linear-gradient(-120deg, rgba(74, 105, 132, 0.03) 0%, transparent 50%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.dark-mode {
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(90, 130, 167, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 0%, rgba(90, 130, 167, 0.05) 0%, transparent 50%),
+    linear-gradient(to bottom, #1a1d20, #141618);
+}
+
+body.dark-mode::before {
+  background: 
+    linear-gradient(120deg, rgba(90, 130, 167, 0.05) 0%, transparent 50%),
+    linear-gradient(-120deg, rgba(90, 130, 167, 0.05) 0%, transparent 50%);
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Lora', 'Playfair Display', serif;
   font-weight: 700;
-  letter-spacing: 0.05em; /* 追加：見出しに風格を */
+  letter-spacing: 0.05em;
+}
+
+/* セクションの装飾 */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0.5;
+  z-index: -1;
+  transform: skewY(-3deg);
+  pointer-events: none;
+}
+
+body.dark-mode section::before {
+  background: linear-gradient(90deg, 
+    rgba(26, 29, 32, 0) 0%,
+    rgba(26, 29, 32, 0.8) 50%,
+    rgba(26, 29, 32, 0) 100%
+  );
+}
+
+.lead {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+  letter-spacing: 0.1em;
 }
 
 /* === ダークモード：より深みのある配色へ === */
@@ -74,13 +147,13 @@ body.dark-mode .btn-outline-dark:hover {
 header {
   background: url("images_compressed/header-bg.webp") center/cover no-repeat;
   color: white;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* 変更：影を柔らかく */
-  padding: 8rem 0; /* 変更：余白をrem単位で調整 */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  padding: 8rem 0;
   text-align: center;
 }
 
 header h1 {
-  font-size: clamp(2.8rem, 8vw, 4.5rem); /* 変更：画面サイズに応じて滑らかに変化 */
+  font-size: clamp(2.8rem, 8vw, 4.5rem);
 }
 
 /* === ナビゲーションバー：影をなくし、境界線でミニマルに === */
@@ -94,18 +167,80 @@ body.dark-mode .navbar {
 }
 
 
-/* === ギャラリー：ホバーエフェクトを洗練させる === */
-section {
-  padding: 5rem 0; /* 変更：余白をrem単位で調整 */
+/* === ギャラリー：洗練された背景とレイアウト === */
+.gallery {
+  position: relative;
+  padding: 5rem 0;
+  background: 
+    radial-gradient(circle at 50% 0%, rgba(74, 105, 132, 0.1) 0%, transparent 70%),
+    radial-gradient(circle at 50% 100%, rgba(74, 105, 132, 0.1) 0%, transparent 70%);
+}
+
+.gallery::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.gallery::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(0deg, 
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+}
+
+body.dark-mode .gallery::before {
+  background: linear-gradient(180deg, 
+    rgba(26, 29, 32, 0.8) 0%,
+    rgba(26, 29, 32, 0) 100%
+  );
+}
+
+body.dark-mode .gallery::after {
+  background: linear-gradient(0deg, 
+    rgba(26, 29, 32, 0.8) 0%,
+    rgba(26, 29, 32, 0) 100%
+  );
 }
 
 #galleryContainer {
   display: grid;
-  grid-gap: 1.5rem; /* 変更：写真間の余白を少し広げる */
+  grid-gap: 1.5rem;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   grid-auto-rows: 200px;
-  max-width: 860px;
-  margin: 0 auto; /* この行を追加 */
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 6px rgba(74, 105, 132, 0.1),
+    0 0 0 1px rgba(74, 105, 132, 0.05);
+}
+
+body.dark-mode #galleryContainer {
+  background: rgba(26, 29, 32, 0.5);
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .gallery-item a {
@@ -113,7 +248,14 @@ section {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  border-radius: 4px;
+  border-radius: 12px; /* 角をより丸く */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 柔らかい影を追加 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item a:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .gallery-item img {
@@ -160,6 +302,77 @@ body.dark-mode .filter-btn.active {
   background-color: #5a82a7; /* 変更：ダークモード用のアクセントカラー */
   color: #fff;
   border-color: #5a82a7;
+}
+
+/* === プロフィールカード === */
+.profile-card {
+  position: fixed;
+  right: 2rem;
+  top: 6rem;
+  width: 200px;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  display: none;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+
+.profile-content {
+  text-align: center;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.profile-card h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.profile-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.social-links a {
+  color: #4a6984;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #5a82a7;
+}
+
+body.dark-mode .profile-card {
+  background-color: #23272b;
+}
+
+body.dark-mode .profile-card h3 {
+  color: #fff;
+}
+
+body.dark-mode .profile-card p {
+  color: #c9c9c9;
+}
+
+@media (max-width: 1200px) {
+  .profile-card {
+    display: none !important;
+  }
 }
 
 /* === その他 === */
