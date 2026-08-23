@@ -1,117 +1,46 @@
-# 📸 写真ポートフォリオ - キンキン
+<div align="center">
+  <h1><samp>kinn00kinn</samp></h1>
+  <p><samp>SOFTWARE&nbsp;&nbsp;/&nbsp;&nbsp;RESEARCH&nbsp;&nbsp;/&nbsp;&nbsp;WRITING</samp></p>
+  <p>
+    <strong>高専専攻科 / 九州大学工学部</strong><br>
+    Web開発とインフラに興味があります。
+  </p>
+  <br>
+  <a href="https://kinn-kinn.com/">
+    <img src="./assets/portfolio-button.svg" width="520" alt="Open kinn-kinn.com">
+  </a>
+  <br><br>
+  <p>
+    <a href="https://kinn-kinn.com/projects/"><kbd>PROJECTS</kbd></a>&nbsp;&nbsp;
+    <a href="https://kinn-kinn.com/writing/"><kbd>WRITING</kbd></a>&nbsp;&nbsp;
+    <a href="https://kinn-kinn.com/activity/"><kbd>ACTIVITY</kbd></a>
+  </p>
+</div>
 
-### 🌟 概要
 
-このリポジトリは、写真家キンキンのポートフォリオサイトです。風景やポートレート作品のギャラリーに加え、撮影記録を綴るブログ、お問い合わせ機能も備えています。2025年10月のアップデートでは、スクロール追従型の自己紹介カード、洗練されたフォント、サイトアイコンの整備など、さらなるユーザー体験の向上を実現しました。
 
-### 🆕 最新のアップデート (2025年10月)
+<table>
+  <tbody>
+    <tr>
+      <td width="58%" valign="top">
+        <p><samp>:: PROFILE</samp></p>
+        <h2>つくる、書く、調べる。</h2>
+        <p>
+          Webアプリケーションを中心に、フロントエンドからバックエンド、インフラまで幅広く開発しています。個人開発で得た知見はブログや技術記事として公開しています。
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-- **スクロール追従型自己紹介カード**: 画面右側に常に表示され、スクロールに応じてスムーズに表示/非表示
-- **洗練されたタイポグラフィ**: Lora, M PLUS Rounded 1c, Noto Sans JPを組み合わせた読みやすいデザイン
-- **サイトアイコンの整備**: ファビコン、アップルタッチアイコンの追加による視認性向上
-- **アニメーション改善**: スムーズなトランジションとインタラクション
+<br>
 
----
-
-### 🔧 機能一覧
-
--   ギャラリー表示（フィルター切り替え：全て / 風景 / ポートレート）
--   Lightbox による画像拡大表示
--   ブログ記事一覧および記事詳細表示
--   Markdownによるブログ執筆
--   お問い合わせリンク（mailto）
--   ダークモード切り替え
--   スクロールトップボタン
--   レスポンシブデザイン（PC・スマホ対応）
-
----
-
-### 🐍 管理用スクリプト (`manage.py`)
-
-日々のコンテンツ管理を効率化するため、Python製のCLIツール `manage.py` を導入しました。画像圧縮、ギャラリー更新、ブログ投稿がコマンド一つで実行できます。
-
-#### 1. 画像の圧縮とギャラリー更新
-
-新しい画像を `images` フォルダに追加した後、このコマンドを実行します。画像の圧縮とギャラリーへの追加が一度に行われます。
-
-```bash
-python manage.py compress
-```
-
-- **処理内容:**
-  - `images` フォルダ内の新しい画像を探索し、軽量な `.webp` 形式に圧縮します。
-  - **プライバシー保護のため、位置情報などのEXIFデータは自動的に削除されます。**
-  - 圧縮された画像は `images_compressed` に保存されます。
-  - `gallery.json` が自動更新され、新しい画像がギャラリーの先頭に追加されます。
-
-#### 2. ギャラリーの手動更新
-
-`images_compressed` フォルダ内をスキャンし、`gallery.json` に未登録の画像を追加します。
-
-```bash
-python manage.py update
-```
-
-#### 3. 新規ブログ記事の追加
-
-Markdownファイルから新しいブログ記事を簡単に追加できます。
-
-**コマンド形式:**
-```bash
-python manage.py addpost "Markdownファイルのパス" "記事のタイトル" "記事の短い説明"
-```
-
----
-
-### 🛠️ 使用技術
-
--   HTML5 / CSS3
--   JavaScript (ES6+)
--   **Python** (コンテンツ管理用)
--   [**Pillow**](https://python-pillow.org/) (画像圧縮)
--   [Bootstrap 4.3.1](https://getbootstrap.com/)
--   [AOS - Animate On Scroll](https://michalsnik.github.io/aos/)
--   [Lightbox2](https://lokeshdhakar.com/projects/lightbox2/)
--   [marked.js](https://marked.js.org/) (Markdownパーサー)
--   Google Fonts（Noto Sans JP）
-
----
-
-### 🚀 コンテンツの管理方法
-
-#### ギャラリーに写真を追加する
-
-1.  新しい画像ファイルを `images` フォルダにコピーします。
-2.  ターミナルで `python manage.py compress` を実行します。
-3.  `gallery.json` を開き、自動で追加された新しい画像の `title` と `category` を編集します。（カテゴリの初期値は `new` です）
-
-#### ブログ記事を投稿する
-
-1.  記事内容を記述したMarkdownファイル（`.md`）を用意します。
-2.  ターミナルで `python manage.py addpost ...` コマンドを実行し、Markdownファイル・タイトル・説明を登録します。
-
----
-
-### 📈 パフォーマンス最適化
-
--   **画像最適化**: `manage.py`により画像を軽量なWebP形式に変換・圧縮。`images_compressed`フォルダから配信。
--   **遅延読み込み**: ギャラリー画像は`loading="lazy"`を使用し、初期表示を高速化。
--   **データ分離**: ギャラリーとブログのデータは`gallery.json`, `blogs.json`から非同期で読み込み、HTMLの肥大化を防止。
--   **CLS抑制**: 画像に`width`/`height`を明示的に指定し、レイアウトシフトを抑制。
--   **コード分割**: CSSとJSを機能ごとにファイル分割し、可読性とキャッシュ効率を向上。
-
----
-
-## 📜 プロジェクトの歴史（開発の流れ）
-
-| 日付 | 内容 |
-| :--- | :--- |
-| 2025年4月 | 初版のHTMLテンプレートを作成。静的な構造と簡単なギャラリーを実装。 |
-| 2025年4月中旬 | ブログセクションとメール問い合わせ機能を追加。 |
-| 2025年4月下旬 | ダークモード切り替え機能とスクロールトップボタンを追加。 |
-| 2025年5月初旬 | モバイル対応・AOSアニメーション・Lightbox導入。 |
-| 2025年5月上旬 | パフォーマンス改善（lazyload等）を実施。Lighthouseスコアを改善。 |
-| **2025年9月** | **大規模改修を実施。**<br>- 画像圧縮・ブログ投稿の自動化スクリプト(`manage.py`)を導入。<br>- WebP形式への完全移行と非同期読み込みによる高速化。<br>- PC/スマホそれぞれに最適化したレスポンシブUIに刷新。<br>- プロジェクト全体のコード構造を整理・最適化。 |
-| 今後の予定 | サービスワーカー導入によるPWA化を検討中。 |
-
----
+<div align="center">
+  <p><samp>:: FIND_ME_ON</samp></p>
+  <p>
+    <a href="https://blog.kinn-kinn.com/"><kbd>BLOG</kbd></a>&nbsp;&nbsp;
+    <a href="https://zenn.dev/kinnkinn"><kbd>ZENN</kbd></a>&nbsp;&nbsp;
+    <a href="https://qiita.com/kinn00kinn"><kbd>QIITA</kbd></a>&nbsp;&nbsp;
+    <a href="https://www.linkedin.com/in/haruki00nakamura/"><kbd>LINKEDIN</kbd></a>
+  </p>
+</div>
